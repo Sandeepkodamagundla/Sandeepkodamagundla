@@ -1,0 +1,82 @@
+To do List
+import tkinter as tk
+from tkinter import messagebox
+
+class ToDoList:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("To-Do List")
+        self.tasks = self.load_tasks()
+
+        self.task_number = tk.Label(root, text="Tasks: 0")
+        self.task_number.pack()
+
+        self.task_entry = tk.Entry(root, width=40)
+        self.task_entry.pack()
+
+        self.add_button = tk.Button(root, text="Add task", command=self.add_task)
+        self.add_button.pack()
+
+        self.task_list = tk.Listbox(root, width=40)
+        self.task_list.pack()
+
+        self.delete_button = tk.Button(root, text="Delete task", command=self.delete_task)
+        self.delete_button.pack()
+
+        self.complete_button = tk.Button(root, text="Mark as complete", command=self.complete_task)
+        self.complete_button.pack()
+
+        self.save_button = tk.Button(root, text="Save and exit", command=self.save_and_exit)
+        self.save_button.pack()
+
+        self.update_task_list()
+
+    def load_tasks(self):
+        try:
+            with open("tasks.txt", "r") as file:
+                return [line.strip() for line in file]
+        except FileNotFoundError:
+            return []
+
+    def save_tasks(self):
+        with open("tasks.txt", "w") as file:
+            for task in self.tasks:
+                file.write(task + "\n")
+
+    def add_task(self):
+        task = self.task_entry.get()
+        if task:
+            self.tasks.append(task)
+            self.update_task_list()
+            self.task_entry.delete(0, tk.END)
+
+    def delete_task(self):
+        try:
+            task_index = self.task_list.curselection()[0]
+            self.tasks.pop(task_index)
+            self.update_task_list()
+        except IndexError:
+            messagebox.showwarning("Error", "Select a task to delete")
+
+    def complete_task(self):
+        try:
+            task_index = self.task_list.curselection()[0]
+            self.tasks[task_index] = f"[x] {self.tasks[task_index]}"
+            self.update_task_list()
+        except IndexError:
+            messagebox.showwarning("Error", "Select a task to mark as complete")
+
+    def update_task_list(self):
+        self.task_list.delete(0, tk.END)
+        for task in self.tasks:
+            self.task_list.insert(tk.END, task)
+        self.task_number.config(text=f"Tasks: {len(self.tasks)}")
+
+    def save_and_exit(self):
+        self.save_tasks()
+        self.root.destroy()
+
+if __name__ == "__main__":
+    root = (link unavailable)()
+    todo_list = ToDoList(root)
+    root.mainloop()
