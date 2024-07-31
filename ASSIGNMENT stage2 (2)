@@ -1,0 +1,53 @@
+
+import numpy as np
+
+def add_matrices(A, B):
+    return np.add(A, B)
+
+def subtract_matrices(A, B):
+    return np.subtract(A, B)
+
+def multiply_matrices(A, B):
+    return np.dot(A, B)
+
+def transpose_matrix(A):
+    return np.transpose(A)
+
+def main():
+    # Get user input for matrices
+    A = np.array(eval(input("Enter matrix A: ")))
+    B = np.array(eval(input("Enter matrix B: ")))
+
+    # Display input matrices
+    print("Matrix A:")
+    print(A)
+    print("Matrix B:")
+    print(B)
+
+    # Choose operation
+    operation = input("Choose operation (add, subtract, multiply, transpose): ")
+
+    # Perform operation
+    if operation == "add":
+        result = add_matrices(A, B)
+    elif operation == "subtract":
+        result = subtract_matrices(A, B)
+    elif operation == "multiply":
+        result = multiply_matrices(A, B)
+    elif operation == "transpose":
+        result = transpose_matrix(A)
+    else:
+        print("Invalid operation")
+        return
+
+    # Display result
+    print("Result:")
+    print(result)
+
+if __name__ == "__main__":
+    main()
+```
+
+This script uses NumPy to perform matrix operations. It first gets user input for two matrices, displays them, and then asks the user to choose an operation. Based on the chosen operation, it calls the corresponding function and displays the result.
+
+Note: The `eval` function is used to convert the user's input into a NumPy array. This can pose a security risk if you're planning to use this script with untrusted input. In a real-world application, you should use a safer method to parse user input.
