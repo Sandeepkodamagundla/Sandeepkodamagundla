@@ -1,0 +1,103 @@
+Here is the complete code for the Django project:
+
+*Step 1: Set up a new Django project*
+
+```
+django-admin startproject django_project
+```
+
+*Step 2: Create an app within the project*
+
+```
+python (link unavailable) startapp blog_app
+```
+
+*Step 3: Define models for a simple data structure*
+
+In `blog_app/models.py`:
+```
+from django.db import models
+
+class BlogPost(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+    content = models.TextField()
+```
+
+*Step 4: Create migrations and migrate the database*
+
+```
+python (link unavailable) makemigrations
+python (link unavailable) migrate
+```
+
+*Step 5: Create views to display a list of blog posts and details of a specific post*
+
+In `blog_app/views.py`:
+```
+from django.shortcuts import render
+from .models import BlogPost
+
+def blog_post_list(request):
+    posts = BlogPost.objects.all()
+    return render(request, 'blog_app/list.html', {'posts': posts})
+
+def blog_post_detail(request, pk):
+    post = BlogPost.objects.get(pk=pk)
+    return render(request, 'blog_app/detail.html', {'post': post})
+```
+
+*Step 6: Create templates for the list and detail views*
+
+In `blog_app/templates/blog_app/list.html`:
+```
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Blog Posts</h1>
+  <ul>
+    {% for post in posts %}
+      <li><a href="{% url 'blog_post_detail' (link unavailable) %}">{{ post.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+```
+
+In `blog_app/templates/blog_app/detail.html`:
+```
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ post.title }}</h1>
+  <p>Author: {{ post.author }}</p>
+  <p>{{ post.content }}</p>
+{% endblock %}
+```
+
+*Step 7: Set up URL patterns*
+
+In `blog_app/urls.py`:
+```
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.blog_post_list, name='blog_post_list'),
+    path('<pk>/', views.blog_post_detail, name='blog_post_detail'),
+]
+```
+
+In `django_project/urls.py`:
+```
+from django.urls import path, include
+
+urlpatterns = [
+    path('blog/', include('blog_app.urls')),
+]
+```
+
+That's it! Run the following command to start the server:
+```
+python (link unavailable) runserver
+```
+Open your web browser and navigate to `http://localhost:8000/blog/` to see the list of blog posts. Click on a post to see its details.
